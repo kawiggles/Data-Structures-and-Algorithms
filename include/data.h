@@ -1,12 +1,20 @@
 #ifndef DATA_H
 #define DATA_H
 
+/*
+Type Definitons
+*/
+
 // Basic data input for program
-struct Data {
+typedef struct {
     int number;
-};
+} Data;
+
+/*
+Functions
+*/
 
 // Returns a pointer to a new data struct
-struct Data * makeData(int inputNumber);
+Data * makeData(int inputNumber);
 
 #endif

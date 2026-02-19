@@ -1,15 +1,15 @@
 #include "data.h"
 #include "linkedlist.h"
+#include "manage.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
-void endProgram() {
+int main(int argc, char * argv[]) {
+    
+    for (int i = 0; i < argc; i++) {
 
-}
-
-int main() {
-    printf("Program starting...\n\n");
-    s
+    }
 
     endProgram();
 

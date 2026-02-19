@@ -2,8 +2,8 @@
 #include "linkedlist.h"
 #include <stdlib.h>
 
-struct ListNode * makeLinkedList(struct Data * input) {
-    struct ListNode * head = malloc(sizeof(struct ListNode));
+ListNode * makeLinkedList(Data * input) {
+    ListNode * head = malloc(sizeof(ListNode));
 
     head->data = input;
     head->next = NULL;
@@ -11,22 +11,10 @@ struct ListNode * makeLinkedList(struct Data * input) {
     return head;
 }
 
-void destroyLinkedList(struct ListNode * head) {
-    struct ListNode * currentNode = head;
-    struct ListNode * nextNode;
-    
-    while (currentNode != NULL) {
-        nextNode = currentNode->next;
-        free(currentNode->data);
-        free(currentNode);
-        currentNode = nextNode;
-    }
-}
-
-int addNode(struct ListNode * priorNode, struct Data * input) {
+int addNode(ListNode * priorNode, Data * input) {
     if (priorNode == NULL) return -1;
 
-    struct ListNode * newNode = malloc(sizeof(struct ListNode));
+    ListNode * newNode = malloc(sizeof(ListNode));
     if (newNode == NULL) return -1;
 
     newNode->data = input;
@@ -34,4 +22,16 @@ int addNode(struct ListNode * priorNode, struct Data * input) {
     priorNode->next = newNode;
 
     return 0;
+}
+
+void destroyLinkedList(ListNode * head) {
+    ListNode * currentNode = head;
+    ListNode * nextNode;
+    
+    while (currentNode != NULL) {
+        nextNode = currentNode->next;
+        free(currentNode->data);
+        free(currentNode);
+        currentNode = nextNode;
+    }
 }

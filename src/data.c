@@ -1,8 +1,8 @@
 #include "data.h"
 #include <stdlib.h>
 
-struct Data * makeData(int inputNumber) {
-    struct Data * newData = malloc(sizeof(struct Data));
+Data * makeData(int inputNumber) {
+    Data * newData = malloc(sizeof(Data));
 
     newData->number = inputNumber;
 

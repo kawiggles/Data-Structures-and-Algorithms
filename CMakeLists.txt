@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 4.2.3)
 
 project(Data_Structures_and_Algorithms)
 
-add_executable(build)
+add_executable(builddata)
 
-target_sources(build
+target_sources(builddata
     PRIVATE
         src/main.c
         src/linkedlist.c
