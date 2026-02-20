@@ -26,6 +26,9 @@ typedef struct {
 Functions
 */
 
+/* Takes input from main() and runs functions */
+void parseInput(char * input);
+
 // Initalizes the list of data structures used by the program
 int initOpenStructuresList(DataStructureType type, Data * data);
 

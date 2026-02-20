@@ -1,17 +1,14 @@
-#include "data.h"
-#include "linkedlist.h"
 #include "manage.h"
-
-#include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char * argv[]) {
-    
-    for (int i = 0; i < argc; i++) {
+int main() {
+    char input[256];
 
+    while (1) {
+        printf("buildstruct> ");
+        fgets(input, sizeof(input), stdin);
+        parseInput(input);
     }
-
-    endProgram();
 
     return 0;
 }

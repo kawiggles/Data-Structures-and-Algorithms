@@ -3,6 +3,15 @@
 #include "data.h"
 
 #include <stdlib.h>
+#include <string.h>
+
+void parseInput(char * input) {
+    char * inputToken = strtok(input, " ");
+
+    while (inputToken != NULL) {
+        
+    }
+}
 
 int initOpenDataStructures (DataStructureType type, Data * data) {
 
