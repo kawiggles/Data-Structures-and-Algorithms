@@ -1,5 +1,6 @@
 # Kawika's Data Structure and Algorithm Tool
-The purpose of this program is to practice building data structures and running various algorithms on them in the C language. It is an academic project. The p 
+---
+The purpose of this program is to practice building data structures and running various algorithms on them in the C language. It is an academic project.
 
 ## Usage
 
@@ -8,16 +9,25 @@ buildstruct [command] [flags]
 ## Commands
 
 build   creates a new data structure of the selected type
-    necessary flags: -t, -d
-    optional flags:
+
+necessary flags: -t, -d
+
 add     adds to an existing data structure
-    necessary flags: -i, -d
+
+necessary flags: -i, -d
+
 destroy deletes an existing data structure
-    necessary flags: -i
+
+necessary flags: -i
+
 algo    performs an algorithmic operation on a data structure
-    necessary flags: -i
+
+necessary flags: -i
+
 print   prints a visual representation of the data structure, as well as information about the structure
-    necessary flags: -i
+
+necessary flags: -i
+
 quit    ends the program
 
 ## Flags
