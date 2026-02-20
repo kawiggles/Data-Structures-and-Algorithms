@@ -2,6 +2,7 @@
 #define MANAGE_H
 
 #include "data.h"
+#include <stdlib.h>
 
 /*
 Type Definitions
@@ -9,33 +10,49 @@ Type Definitions
 
 // Defines the different data structures which can be created
 typedef enum {
-    LinkedList
+    LINKEDLIST,
+    UNDEFINED
 } DataStructureType;
+
+typedef enum {
+    BUILD,
+    ADD,
+    DESTROY,
+    ALGO,
+    PRINT,
+    QUIT,
+    INVALID
+} Operation;
 
 // Members of the linked list which defines the open data structures
 typedef struct {
+    // enum of the structure type
+    DataStructureType structureType;
     // Pointer to the head of the data structure.
     void * dataStructure;
     // Numerical Id to easily identify the structure
-    int Id;
+    int structureId;
     // Pointer to the next structure
-    struct openStructureListNode * next;
-} openStructure;
+    OpenStructure * nextStructure;
+} OpenStructure;
 
 /*
 Functions
 */
 
-/* Takes input from main() and runs functions */
-void parseInput(char * input);
+// Returns an Operation enum from a string
+Operation getOperation(char * operationInput);
 
-// Initalizes the list of data structures used by the program
-int initOpenStructuresList(DataStructureType type, Data * data);
+// Returns a DataStructureType enum from a string
+DataStructureType getStructureType(char * structureInput);
 
-// Adds a new data structure member to a data structure
-int addOpenStructuresList(DataStructureType type, Data * data);
+// Makes a new structure to add to the open structure linked list
+OpenStructure * makeOpenStructure(int id); 
+
+// Takes input from main() and runs functions
+int parseInput(char * input);
 
 // Frees memory for all open data structures
-void endProgram(openStructure * head);
+void endProgram(OpenStructure * head);
 
 #endif

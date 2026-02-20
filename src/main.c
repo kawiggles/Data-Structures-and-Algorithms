@@ -7,7 +7,7 @@ int main() {
     while (1) {
         printf("buildstruct> ");
         fgets(input, sizeof(input), stdin);
-        parseInput(input);
+        if (parseInput(input)) break;
     }
 
     return 0;
