@@ -49,6 +49,12 @@ DataStructureType getStructureType(char * structureInput);
 // Makes a new structure to add to the open structure linked list
 OpenStructure * makeOpenStructure(int id); 
 
+// Returns a pointer to a structure in the open structure linked list from its id
+OpenStructure * getStructure(int id);
+
+// Get's last structure in stucture linked list
+OpenStructure * getLastStructure();
+
 // Takes input from main() and runs functions
 int parseInput(char * input);
 

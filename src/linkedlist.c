@@ -35,3 +35,11 @@ void destroyLinkedList(ListNode * head) {
         currentNode = nextNode;
     }
 }
+
+ListNode * getLastNode(ListNode * head) {
+    ListNode * currentNode = head;
+
+    while (currentNode->next != NULL) currentNode = currentNode->next;
+
+    return currentNode;
+}

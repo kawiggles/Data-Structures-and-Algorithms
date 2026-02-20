@@ -34,6 +34,30 @@ OpenStructure * makeOpenStructure(int id) {
     return newStructure; 
 }
 
+OpenStructure * getStructure(int id) {
+    OpenStructure * currentStructure = openStructureListHead;
+
+    while (currentStructure != NULL) {
+        if (currentStructure->structureId == id) return currentStructure;
+        currentStructure = currentStructure->nextStructure;
+    }
+
+    printf("Error: structure id not found");
+    return NULL;
+}
+
+OpenStructure * getLastStructure() {
+    OpenStructure * currentStructure = openStructureListHead;
+
+    while (currentStructure != NULL) {
+        if(currentStructure->nextStructure == NULL) return currentStructure; 
+        currentStructure = currentStructure->nextStructure;
+    }
+
+    printf("Error: no list of structures found");
+    return NULL;
+}
+
 void endProgram(OpenStructure * head) {
     OpenStructure * currentStructure = head;
     OpenStructure * nextStructure;
@@ -82,57 +106,95 @@ int parseInput(char * input) {
                     id = atoi(flagValue);
                 } else {
                     printf("Error: flag %c not recognized", flag);
-                    return -1;
+                    return 0;
                 }
             }
+
             token = strtok(NULL, " \n");
         }
 
-        OpenStructure * currentStructure = openStructureListHead;
-
         switch (getOperation(operation)) {
             case BUILD: {
-                if (currentStructure == NULL) {
+                OpenStructure * workingStructure;
+
+                if (openStructureListHead == NULL) {
                     openStructureListHead = makeOpenStructure(nextId);
+                    workingStructure = openStructureListHead;
                 } else {
-                    while (currentStructure->nextStructure != NULL) {
-                        currentStructure = currentStructure->nextStructure;
-                    }
-                    currentStructure->nextStructure = makeOpenStructure(nextId);
-                    currentStructure = currentStructure->nextStructure;
+                    workingStructure = getLastStructure();
+                    workingStructure->nextStructure = makeOpenStructure(nextId);
+                    workingStructure = workingStructure->nextStructure;
                 }
 
-                if (type == LINKEDLIST) {
-                    currentStructure->structureType = LINKEDLIST;
-                    currentStructure->dataStructure = makeLinkedList(data);
-                    printf("Linked List successfully built with id %u", nextId);
-                } else if (type == UNDEFINED) {
-                    printf("Error: cannot build undefined data structure");
-                    return -1;
-                } else {
-                    printf("DEBUG ERROR: no data structure type encountered during build operation");
-                    return -1;
+                switch (type) {
+                    case LINKEDLIST:
+                        workingStructure->structureType = LINKEDLIST;
+                        workingStructure->dataStructure = makeLinkedList(data);
+                        printf("Linked list successfully built with id %u", nextId);
+                        break;
+                    case UNDEFINED:
+                        printf("Error: cannot build undefined data structure");
+                        break;
+                    default: 
+                        printf("DEBUG ERROR: no data structure type encountered during build operation");
+                        return -1;
                 }
+
                 nextId ++;
                 break;
             }
-            case ADD:
-                while (currentStructure->structureId != id) {
-                    currentStructure = currentStructure->nextStructure;
+            case ADD: {
+                OpenStructure * workingStructure = getStructure(id); 
 
-                    if (currentStructure == NULL) {
-                        printf("Error: structure id not found");
-                        return 0;
-                    }
+                if (workingStructure == NULL) return 0;
+                
+                switch (workingStructure->structureType) {
+                    case LINKEDLIST:
+                        addNode(getLastNode(workingStructure->dataStructure), data);
+                        printf("Node successfully added to end of linked list with id %u", id);
+                        break; 
+                    case UNDEFINED:
+                        printf("Error: selected structure is an undefined type");
+                        break;
+                    default:
+                        printf("DEBUG ERROR: empty structure");
+                        return -1;
                 }
 
-                if (currentStructure->structureType == LINKEDLIST) {
+                break;
+            }
+            case DESTROY: {
+                OpenStructure ** workingPointer = &openStructureListHead;
 
+                while (*workingPointer != NULL && (*workingPointer)->structureId != id) {
+                    workingPointer = &(*workingPointer)->nextStructure;
                 }
-                break;
-            case DESTROY:
+
+                if (*workingPointer == NULL) {
+                    printf("Error: structure id not found");
+                    break;
+                }
+
+                OpenStructure * workingStructure = *workingPointer;
+                *workingPointer = workingStructure->nextStructure;
+
+                switch (workingStructure->structureType) {
+                    case LINKEDLIST:
+                        destroyLinkedList(workingStructure->dataStructure);
+                        free(workingStructure);
+                        printf("Linked list at id %u successfully destroyed", id);
+                        break;
+                    case UNDEFINED:
+                        printf("Error: selected structure is undefined");
+                        break;
+                    default:
+                        printf("DEBUG ERROR: empty structure");
+                        return -1;
+                }
 
                 break;
+            }
+
             case ALGO:
 
                 break;
