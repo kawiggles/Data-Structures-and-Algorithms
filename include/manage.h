@@ -25,7 +25,8 @@ typedef enum {
 } Operation;
 
 // Members of the linked list which defines the open data structures
-typedef struct {
+typedef struct OpenStructure OpenStructure;
+struct OpenStructure {
     // enum of the structure type
     DataStructureType structureType;
     // Pointer to the head of the data structure.
@@ -34,7 +35,7 @@ typedef struct {
     int structureId;
     // Pointer to the next structure
     OpenStructure * nextStructure;
-} OpenStructure;
+};
 
 /*
 Functions

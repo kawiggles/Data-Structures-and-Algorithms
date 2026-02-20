@@ -6,9 +6,10 @@ Type Definitons
 */
 
 // Basic data input for program
-typedef struct {
+typedef struct Data Data;
+struct Data {
     int number;
-} Data;
+};
 
 /*
 Functions

@@ -8,10 +8,11 @@ Type Definitions
 */
 
 // Holds a data struct and a pointer to another ListNode struct
-typedef struct {
-    struct Data * data;
-    struct ListNode * next;
-} ListNode;
+typedef struct ListNode ListNode;
+struct ListNode {
+    Data * data;
+    ListNode * next;
+};
 
 /*
 Functions
