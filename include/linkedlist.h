@@ -7,11 +7,11 @@
 Type Definitions
 */
 
-// Holds a data struct and a pointer to another ListNode struct
-typedef struct ListNode ListNode;
-struct ListNode {
+// Holds a data struct and a pointer to another LinkedListNode struct
+typedef struct LinkedListNode LinkedListNode;
+struct LinkedListNode {
     Data * data;
-    ListNode * next;
+    LinkedListNode * next;
 };
 
 /*
@@ -19,15 +19,17 @@ Functions
 */
 
 // Takes a pointer to a data struct and returns a pointer to a new head for a linked list
-ListNode * makeLinkedList(Data * input);
+LinkedListNode * makeLinkedList(Data * input);
 
 // Starting from head input, frees memory for every node and its data
-void destroyLinkedList(ListNode * head);
+void destroyLinkedList(LinkedListNode * head);
 
 // Adds a new node with "input" data after "priorNode"
-int addNode(ListNode * priorNode, Data * input);
+int addLLNode(LinkedListNode * priorNode, Data * input);
 
 // Iterates through a linked list to return last node of structure
-ListNode * getLastNode (ListNode * head);
+LinkedListNode * getLLLastNode (LinkedListNode * head);
 
+// Prints a linked list
+void printLinkedList(LinkedListNode * head);
 #endif

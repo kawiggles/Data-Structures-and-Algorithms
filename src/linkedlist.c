@@ -1,9 +1,11 @@
 #include "data.h"
 #include "linkedlist.h"
-#include <stdlib.h>
 
-ListNode * makeLinkedList(Data * input) {
-    ListNode * head = malloc(sizeof(ListNode));
+#include <stdlib.h>
+#include <stdio.h>
+
+LinkedListNode * makeLinkedList(Data * input) {
+    LinkedListNode * head = malloc(sizeof(LinkedListNode));
 
     head->data = input;
     head->next = NULL;
@@ -11,10 +13,10 @@ ListNode * makeLinkedList(Data * input) {
     return head;
 }
 
-int addNode(ListNode * priorNode, Data * input) {
+int addLLNode(LinkedListNode * priorNode, Data * input) {
     if (priorNode == NULL) return -1;
 
-    ListNode * newNode = malloc(sizeof(ListNode));
+    LinkedListNode * newNode = malloc(sizeof(LinkedListNode));
     if (newNode == NULL) return -1;
 
     newNode->data = input;
@@ -24,9 +26,9 @@ int addNode(ListNode * priorNode, Data * input) {
     return 0;
 }
 
-void destroyLinkedList(ListNode * head) {
-    ListNode * currentNode = head;
-    ListNode * nextNode;
+void destroyLinkedList(LinkedListNode * head) {
+    LinkedListNode * currentNode = head;
+    LinkedListNode * nextNode;
     
     while (currentNode != NULL) {
         nextNode = currentNode->next;
@@ -36,10 +38,24 @@ void destroyLinkedList(ListNode * head) {
     }
 }
 
-ListNode * getLastNode(ListNode * head) {
-    ListNode * currentNode = head;
+LinkedListNode * getLLLastNode(LinkedListNode * head) {
+    LinkedListNode * currentNode = head;
 
     while (currentNode->next != NULL) currentNode = currentNode->next;
 
     return currentNode;
 }
+
+void printLinkedList(LinkedListNode * head) {
+    LinkedListNode * currentNode = head;
+
+    while (currentNode->next != NULL) {
+        printData(currentNode->data);
+        printf(" -> ");
+        currentNode = currentNode->next;
+    }
+
+    printData(currentNode->data);
+    printf("\n");
+}
+

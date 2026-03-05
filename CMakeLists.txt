@@ -22,3 +22,5 @@ target_sources(buildstruct
             include/linkedlist.h
             include/manage.h
 )
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

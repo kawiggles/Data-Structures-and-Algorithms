@@ -18,4 +18,7 @@ Functions
 // Returns a pointer to a new data struct
 Data * makeData(int inputNumber);
 
+// Prints contents of data struct, for use in print operations
+void printData(Data * data);
+
 #endif
