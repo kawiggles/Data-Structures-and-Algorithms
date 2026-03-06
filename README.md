@@ -11,12 +11,17 @@ buildstruct [command] [flags]
     - necessary flags: *-t*, *-d*
 - **add**     adds to an existing data structure
     - necessary flags: *-i*, *-d*
+    - optional flags: *-n*
+- **delete**  deletes an element from a data structure
+    - necessary flags: *-i*
+    - optional flags: *-n*
 - **destroy** deletes an existing data structure
     - necessary flags: *-i*
 - **algo**    performs an algorithmic operation on a data structure
     - necessary flags: *-i*
 - **print**   prints a visual representation of the data structure, as well as information about the structure
     - necessary flags: *-i*
+- **printall** prints all open data structures and their IDs.
 - **quit**    ends the program
 
 ## Flags
@@ -25,9 +30,12 @@ buildstruct [command] [flags]
     + linkedlist
 + -d [data]   selects data for program to insert into structure (currently only integer values)
 + -i [id]     selects a data structure by id
++ -n [index]  selects a node in a data structure by index (starting at 0)
 
 ## Examples
 
-buildstruct make -t linkedlist -d 32
+build -t linkedlist -d 32
 
-buildstruct destroy -i 1
+destroy -i 1
+
+printall

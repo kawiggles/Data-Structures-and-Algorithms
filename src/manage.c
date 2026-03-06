@@ -13,8 +13,12 @@ Operation getOperation(char * operationInput) {
         if (operationInput[1] == 'd') { return ADD; 
         } else return ALGO;
     } else if (operationInput[0] == 'b') {return BUILD;
-    } else if (operationInput[0] == 'd') {return DESTROY;
-    } else if (operationInput[0] == 'p') {return PRINT;
+    } else if (operationInput[0] == 'd') {
+        if (operationInput[2] == 's') { return DESTROY;
+        } else return DELETE;
+    } else if (operationInput[0] == 'p') {
+        if (operationInput[5] == '\0') { return PRINT; 
+        } else return PRINTALL;
     } else if (operationInput[0] == 'q') {return QUIT;
     } else return INVALID;
 }
@@ -85,6 +89,7 @@ int parseInput(char * input) {
     DataStructureType type = UNDEFINED;
     Data * data = NULL;
     int id = 0;
+    int index = -1;
 
     while (token != NULL) {
         if (token[0] == '-') {
@@ -93,7 +98,7 @@ int parseInput(char * input) {
 
             if (!flagValue) {
                 printf("Error: no value after flag %c \n", flag);
-                return -1;
+                return 0;
             }
 
             if (flag == 't') {
@@ -102,6 +107,8 @@ int parseInput(char * input) {
                 data = makeData(atoi(flagValue));
             } else if (flag == 'i') {
                 id = atoi(flagValue);
+            } else if (flag == 'n') {
+                index = atoi(flagValue);
             } else {
                 printf("Error: flag %c not recognized \n", flag);
                 return 0;
@@ -148,8 +155,8 @@ int parseInput(char * input) {
             
             switch (workingStructure->structureType) {
                 case LINKEDLIST:
-                    addLLNode(getLLLastNode(workingStructure->dataStructure), data);
-                    printf("Node successfully added to end of linked list with id %u \n", id);
+                    addLLNode(workingStructure->dataStructure, data, index);
+                    printf("Node successfully added to linked list at id %u \n", id);
                     break; 
                 case UNDEFINED:
                     printf("Error: selected structure is an undefined type \n");
@@ -160,6 +167,25 @@ int parseInput(char * input) {
             }
 
             break;
+        }
+        case DELETE: {
+            OpenStructure * workingStructure = getStructure(id);
+
+            if (workingStructure == NULL) return 0;
+
+            switch (workingStructure->structureType) {
+                case LINKEDLIST: {
+                    LinkedListNode ** head = (LinkedListNode **) workingStructure->dataStructure;
+                    deleteLLNode(head, index);
+                    break;
+                }
+                case UNDEFINED:
+                    printf("Error: selected structure is an undefined type \n");
+                    break;
+                default:
+                    printf("DEBUG ERROR: empty structure \n");
+                    return -1;
+            }
         }
         case DESTROY: {
             OpenStructure ** workingPointer = &openStructureListHead;
@@ -212,6 +238,28 @@ int parseInput(char * input) {
                 default:
                     printf("DEBUG ERROR: emptry structure \n");
                     return -1;
+            }
+
+            break;
+        }
+        case PRINTALL: {
+            OpenStructure * currentStructure = openStructureListHead;
+            int listIndex = 1;
+
+            while (currentStructure != NULL) {
+                printf("ID %i: ", currentStructure->structureId);
+                
+                switch (currentStructure->structureType) {
+                    case LINKEDLIST:
+                        printf("Linked List \n    ");
+                        printLinkedList(currentStructure->dataStructure);
+                        break;
+                    case UNDEFINED:
+                        printf("Undefined Structure Type \n");
+                        break;
+                }
+
+            currentStructure = currentStructure->nextStructure;
             }
 
             break;

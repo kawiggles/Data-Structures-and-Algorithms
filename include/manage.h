@@ -1,7 +1,6 @@
 #ifndef MANAGE_H
 #define MANAGE_H
 
-#include "data.h"
 #include <stdlib.h>
 
 /*
@@ -17,9 +16,11 @@ typedef enum {
 typedef enum {
     BUILD,
     ADD,
+    DELETE,
     DESTROY,
     ALGO,
     PRINT,
+    PRINTALL,
     QUIT,
     INVALID
 } Operation;

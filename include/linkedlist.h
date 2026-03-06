@@ -25,7 +25,10 @@ LinkedListNode * makeLinkedList(Data * input);
 void destroyLinkedList(LinkedListNode * head);
 
 // Adds a new node with "input" data after "priorNode"
-int addLLNode(LinkedListNode * priorNode, Data * input);
+int addLLNode(LinkedListNode * node, Data * input, int index);
+
+// Deletes a node in a linked list
+int deleteLLNode(LinkedListNode ** node, int index);
 
 // Iterates through a linked list to return last node of structure
 LinkedListNode * getLLLastNode (LinkedListNode * head);

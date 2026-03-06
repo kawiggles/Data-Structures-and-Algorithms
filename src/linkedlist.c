@@ -13,8 +13,22 @@ LinkedListNode * makeLinkedList(Data * input) {
     return head;
 }
 
-int addLLNode(LinkedListNode * priorNode, Data * input) {
-    if (priorNode == NULL) return -1;
+int addLLNode(LinkedListNode * node, Data * input, int index) {
+    if (node == NULL) return -1;
+    
+    LinkedListNode * priorNode = node;
+    if (index == -1) {
+        priorNode = getLLLastNode(node);
+    } else {
+        for (int i = 0; i < index; i++) {
+            if (priorNode->next != NULL) { 
+                priorNode = priorNode->next;
+            } else {
+                printf("Error: no node at index %i \n", index);
+                return 0;
+            }
+        }
+    }
 
     LinkedListNode * newNode = malloc(sizeof(LinkedListNode));
     if (newNode == NULL) return -1;
@@ -24,6 +38,43 @@ int addLLNode(LinkedListNode * priorNode, Data * input) {
     priorNode->next = newNode;
 
     return 0;
+}
+
+int deleteLLNode(LinkedListNode **node, int index) {
+    if (*node == NULL) return -1;
+    
+    if ((*node)->next == NULL) {
+        printf("Error: only one node in structure, use 'destroy' to remove this structure");
+        return 0;
+    }
+
+    if (index == -1) {
+        LinkedListNode * prior = *node;
+        while (prior->next->next != NULL) {
+            prior = prior->next;
+        }
+        free(prior->next->data);
+        free(prior->next);
+        prior->next = NULL;
+        return 0;
+    } else {
+        LinkedListNode ** pointer = node;
+
+        for (int i = 0; i < index && *pointer != NULL; i++) {
+            pointer = &(*pointer)->next;
+        }
+
+        if (*pointer == NULL) {
+            printf("Error: node to destroy not found at index %i", index);
+            return 0;
+        }
+
+        LinkedListNode * target = *pointer;
+        *pointer = target->next;
+        free(target->data);
+        free(target);
+        return 0;
+    }
 }
 
 void destroyLinkedList(LinkedListNode * head) {
