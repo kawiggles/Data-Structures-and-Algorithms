@@ -97,7 +97,7 @@ int parseInput(char * input) {
             char * flagValue = strtok(NULL, " \n");
 
             if (!flagValue) {
-                printf("Error: no value after flag %c \n", flag);
+                printf("Error: no value after flag -%c \n", flag);
                 return 0;
             }
 
@@ -175,7 +175,7 @@ int parseInput(char * input) {
 
             switch (workingStructure->structureType) {
                 case LINKEDLIST: {
-                    LinkedListNode ** head = (LinkedListNode **) workingStructure->dataStructure;
+                    LinkedListNode ** head = (LinkedListNode **) &workingStructure->dataStructure;
                     deleteLLNode(head, index);
                     break;
                 }
@@ -186,6 +186,8 @@ int parseInput(char * input) {
                     printf("DEBUG ERROR: empty structure \n");
                     return -1;
             }
+
+            break;
         }
         case DESTROY: {
             OpenStructure ** workingPointer = &openStructureListHead;

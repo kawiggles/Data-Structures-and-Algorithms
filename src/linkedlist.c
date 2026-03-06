@@ -44,7 +44,7 @@ int deleteLLNode(LinkedListNode **node, int index) {
     if (*node == NULL) return -1;
     
     if ((*node)->next == NULL) {
-        printf("Error: only one node in structure, use 'destroy' to remove this structure");
+        printf("Error: only one node in structure, use 'destroy' to remove this structure \n");
         return 0;
     }
 
@@ -65,7 +65,7 @@ int deleteLLNode(LinkedListNode **node, int index) {
         }
 
         if (*pointer == NULL) {
-            printf("Error: node to destroy not found at index %i", index);
+            printf("Error: node to destroy not found at index %i \n", index);
             return 0;
         }
 
