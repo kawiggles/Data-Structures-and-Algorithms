@@ -28,7 +28,7 @@ buildstruct [command] [flags]
 
 + -t [type]   selects the type of data structure to generate
     + linkedlist
-+ -d [data]   selects data for program to insert into structure (currently only integer values)
++ -d [data]   selects data for program to insert into structure (currently only positive integer values)
 + -i [id]     selects a data structure by id
 + -n [index]  selects a node in a data structure by index (starting at 0)
 
@@ -36,6 +36,6 @@ buildstruct [command] [flags]
 
 build -t linkedlist -d 32
 
-destroy -i 1
+add -i 2 -d 234987 -n 4
 
 printall

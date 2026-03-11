@@ -30,8 +30,11 @@ int addLLNode(LinkedListNode * node, Data * input, int index);
 // Deletes a node in a linked list
 int deleteLLNode(LinkedListNode ** node, int index);
 
+// Get length of linked list
+int getLLLength(LinkedListNode * head);
+
 // Iterates through a linked list to return last node of structure
-LinkedListNode * getLLLastNode (LinkedListNode * head);
+LinkedListNode * getLLLastNode(LinkedListNode * head);
 
 // Prints a linked list
 void printLinkedList(LinkedListNode * head);

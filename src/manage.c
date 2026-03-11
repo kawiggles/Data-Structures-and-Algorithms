@@ -120,6 +120,11 @@ int parseInput(char * input) {
 
     switch (getOperation(operation)) {
         case BUILD: {
+            if (!data) {
+                printf("Error: no data to add to new structure \n");
+                return 0;
+            }
+
             OpenStructure * workingStructure;
 
             if (openStructureListHead == NULL) {
@@ -135,6 +140,7 @@ int parseInput(char * input) {
                 case LINKEDLIST:
                     workingStructure->structureType = LINKEDLIST;
                     workingStructure->dataStructure = makeLinkedList(data);
+                    nextId++;
                     printf("Linked list successfully built with id %u \n", nextId);
                     break;
                 case UNDEFINED:
@@ -144,14 +150,20 @@ int parseInput(char * input) {
                     printf("DEBUG ERROR: no data structure type encountered during build operation \n");
                     return -1;
             }
-
-            nextId ++;
             break;
         }
         case ADD: {
+            if (!data) {
+                printf("Error: no data to add to selected structure\n");
+                return 0;
+            }
+            
             OpenStructure * workingStructure = getStructure(id); 
 
-            if (workingStructure == NULL) return 0;
+            if (workingStructure == NULL) {
+                printf("Error: no data structure at selected index\n");
+                return 0;
+            }
             
             switch (workingStructure->structureType) {
                 case LINKEDLIST:
@@ -246,6 +258,8 @@ int parseInput(char * input) {
         }
         case PRINTALL: {
             OpenStructure * currentStructure = openStructureListHead;
+            if (!currentStructure) return 0;
+
             int listIndex = 1;
 
             while (currentStructure != NULL) {
@@ -274,6 +288,7 @@ int parseInput(char * input) {
             break;
         default:
             printf("DEBUG ERROR: problem with getOperation");
+            return -1;
     }
 
 
