@@ -1,14 +1,13 @@
 #ifndef MANAGE_H
 #define MANAGE_H
 
-#include <stdlib.h>
-
 /*
 Type Definitions
 */
 
 // Defines the different data structures which can be created
 typedef enum {
+    ARRAY,
     LINKEDLIST,
     UNDEFINED
 } DataStructureType;
@@ -36,6 +35,8 @@ struct OpenStructure {
     int structureId;
     // Pointer to the next structure
     OpenStructure * nextStructure;
+    // Size of struct, necessary for arrays
+    int size;
 };
 
 /*

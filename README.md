@@ -11,7 +11,7 @@ buildstruct [command] [flags]
     - necessary flags: *-t*, *-d*
 - **add**     adds to an existing data structure
     - necessary flags: *-i*, *-d*
-    - optional flags: *-n*
+    - optional flags: *-n*, *-s*
 - **delete**  deletes an element from a data structure
     - necessary flags: *-i*
     - optional flags: *-n*
@@ -27,10 +27,12 @@ buildstruct [command] [flags]
 ## Flags
 
 + -t [type]   selects the type of data structure to generate
+    + array
     + linkedlist
 + -d [data]   selects data for program to insert into structure (currently only positive integer values)
 + -i [id]     selects a data structure by id
 + -n [index]  selects a node in a data structure by index (starting at 0)
++ -s [size]   sets the size of the data structure to build (required for arrays)
 
 ## Examples
 

@@ -37,7 +37,7 @@ int addLLNode(LinkedListNode * node, Data * input, int index) {
     newNode->next = priorNode->next;
     priorNode->next = newNode;
 
-    return 0;
+    return 1;
 }
 
 int deleteLLNode(LinkedListNode **node, int index) {
@@ -56,7 +56,7 @@ int deleteLLNode(LinkedListNode **node, int index) {
         free(prior->next->data);
         free(prior->next);
         prior->next = NULL;
-        return 0;
+        return 1;
     } else {
         LinkedListNode ** pointer = node;
 
@@ -73,7 +73,7 @@ int deleteLLNode(LinkedListNode **node, int index) {
         *pointer = target->next;
         free(target->data);
         free(target);
-        return 0;
+        return 1;
     }
 }
 

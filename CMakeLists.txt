@@ -8,6 +8,7 @@ target_sources(buildstruct
     PRIVATE
         src/main.c
         src/data.c
+        src/array.c
         src/linkedlist.c
         src/manage.c
         src/algo.c
@@ -19,6 +20,7 @@ target_sources(buildstruct
             include
         FILES
             include/data.h
+            include/array.h
             include/linkedlist.h
             include/manage.h
             include/algo.h

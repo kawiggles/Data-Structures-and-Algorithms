@@ -1,8 +1,10 @@
 #include "manage.h"
+#include "array.h"
 #include "linkedlist.h"
 #include "data.h"
 
 #include <string.h>
+#include "stdlib.h"
 #include <stdio.h>
 
 static OpenStructure * openStructureListHead = NULL; 
@@ -88,6 +90,7 @@ int parseInput(char * input) {
     char * token = strtok(NULL, " \n");
     DataStructureType type = UNDEFINED;
     Data * data = NULL;
+    int size = 0;
     int id = 0;
     int index = -1;
 
@@ -109,6 +112,8 @@ int parseInput(char * input) {
                 id = atoi(flagValue);
             } else if (flag == 'n') {
                 index = atoi(flagValue);
+            } else if (flag == 's') {
+                size = atoi(flagValue);
             } else {
                 printf("Error: flag %c not recognized \n", flag);
                 return 0;
@@ -137,6 +142,13 @@ int parseInput(char * input) {
             }
 
             switch (type) {
+                case ARRAY:
+                    workingStructure->structureType = ARRAY;
+                    workingStructure->dataStructure = makeArray(data, size);
+                    workingStructure->size = size;
+                    nextId++;
+                    printf("Array successfully built with id %u\n", nextId);
+                    break;
                 case LINKEDLIST:
                     workingStructure->structureType = LINKEDLIST;
                     workingStructure->dataStructure = makeLinkedList(data);
@@ -166,6 +178,10 @@ int parseInput(char * input) {
             }
             
             switch (workingStructure->structureType) {
+                case ARRAY:
+                    addToArray(workingStructure->dataStructure, data, index, workingStructure->size);
+                    printf("Element successfully added to array at id %u\n", id);
+                    break;
                 case LINKEDLIST:
                     addLLNode(workingStructure->dataStructure, data, index);
                     printf("Node successfully added to linked list at id %u \n", id);
@@ -186,6 +202,9 @@ int parseInput(char * input) {
             if (workingStructure == NULL) return 0;
 
             switch (workingStructure->structureType) {
+                case ARRAY:
+                    deleteFromArray(workingStructure->dataStructure, index, workingStructure->size);
+                    break;
                 case LINKEDLIST: {
                     LinkedListNode ** head = (LinkedListNode **) &workingStructure->dataStructure;
                     deleteLLNode(head, index);
@@ -217,6 +236,11 @@ int parseInput(char * input) {
             *workingPointer = workingStructure->nextStructure;
 
             switch (workingStructure->structureType) {
+                case ARRAY:
+                    destroyArray(workingStructure->dataStructure);
+                    free(workingStructure);
+                    printf("Array at id %u successfully destroyed\n", id);
+                    break;
                 case LINKEDLIST:
                     destroyLinkedList(workingStructure->dataStructure);
                     free(workingStructure);
@@ -266,6 +290,10 @@ int parseInput(char * input) {
                 printf("ID %i: ", currentStructure->structureId);
                 
                 switch (currentStructure->structureType) {
+                    case ARRAY:
+                        printf("Array \n    ");
+                            printArray(currentStructure->dataStructure);
+                        break;
                     case LINKEDLIST:
                         printf("Linked List \n    ");
                         printLinkedList(currentStructure->dataStructure);
