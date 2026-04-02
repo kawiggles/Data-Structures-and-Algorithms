@@ -9,6 +9,7 @@ Type Definitions
 typedef enum {
     ARRAY,
     LINKEDLIST,
+    HASHTABLE,
     UNDEFINED
 } DataStructureType;
 

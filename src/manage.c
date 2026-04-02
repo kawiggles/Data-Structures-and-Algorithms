@@ -1,6 +1,7 @@
 #include "manage.h"
 #include "array.h"
 #include "linkedlist.h"
+#include "hashtable.h"
 #include "data.h"
 
 #include <string.h>
@@ -27,6 +28,8 @@ Operation getOperation(char * operationInput) {
 
 DataStructureType getStructureType(char * structureInput) {
     if (structureInput[0] == 'l') { return LINKEDLIST; 
+    } else if (structureInput[0] == 'a') { return ARRAY;
+    } else if (structureInput[0] == 'h') { return HASHTABLE;
     } else return UNDEFINED;
 }
 
@@ -72,7 +75,9 @@ void endProgram(OpenStructure * head) {
         nextStructure = currentStructure->nextStructure;
 
         switch (currentStructure->structureType) {
+            case ARRAY: destroyArray(currentStructure->dataStructure); break;
             case LINKEDLIST: destroyLinkedList(currentStructure->dataStructure); break;
+            case HASHTABLE: destroyHashTable(currentStructure->dataStructure); break;
             case UNDEFINED:  printf("Error: Undefined data structured encountered \n"); break;
             default: printf("DEBUG ERROR: problem with endProgram() \n");
         }
@@ -146,15 +151,20 @@ int parseInput(char * input) {
                     workingStructure->structureType = ARRAY;
                     workingStructure->dataStructure = makeArray(data, size);
                     workingStructure->size = size;
-                    nextId++;
                     printf("Array successfully built with id %u\n", nextId);
+                    nextId++;
                     break;
                 case LINKEDLIST:
                     workingStructure->structureType = LINKEDLIST;
                     workingStructure->dataStructure = makeLinkedList(data);
-                    nextId++;
                     printf("Linked list successfully built with id %u \n", nextId);
+                    nextId++;
                     break;
+                case HASHTABLE:
+                    workingStructure->structureType = HASHTABLE;
+                    workingStructure->dataStructure = makeHashTable(data);
+                    printf("Hash table successfully built with id %u \n", nextId);
+                    nextId++;
                 case UNDEFINED:
                     printf("Error: cannot build undefined data structure \n");
                     break;
@@ -183,9 +193,13 @@ int parseInput(char * input) {
                     printf("Element successfully added to array at id %u\n", id);
                     break;
                 case LINKEDLIST:
-                    addLLNode(workingStructure->dataStructure, data, index);
+                    addToLinkedList(workingStructure->dataStructure, data, index);
                     printf("Node successfully added to linked list at id %u \n", id);
                     break; 
+                case HASHTABLE:
+                    addToHashTable(workingStructure->dataStructure, data);
+                    printf("Element successfully added to hash table at id %u \n", id);
+                    break;
                 case UNDEFINED:
                     printf("Error: selected structure is an undefined type \n");
                     break;
@@ -207,9 +221,12 @@ int parseInput(char * input) {
                     break;
                 case LINKEDLIST: {
                     LinkedListNode ** head = (LinkedListNode **) &workingStructure->dataStructure;
-                    deleteLLNode(head, index);
+                    deleteFromLinkedList(head, index);
                     break;
                 }
+                case HASHTABLE:
+                    deleteFromHashTable(workingStructure->dataStructure, data);
+                    break;
                 case UNDEFINED:
                     printf("Error: selected structure is an undefined type \n");
                     break;
@@ -245,6 +262,11 @@ int parseInput(char * input) {
                     destroyLinkedList(workingStructure->dataStructure);
                     free(workingStructure);
                     printf("Linked list at id %u successfully destroyed \n", id);
+                    break;
+                case HASHTABLE:
+                    destroyHashTable(workingStructure->dataStructure);
+                    free(workingStructure);
+                    printf("Hash table at id %u successfully destroyed \n", id);
                     break;
                 case UNDEFINED:
                     printf("Error: selected structure is undefined \n");
@@ -292,7 +314,6 @@ int parseInput(char * input) {
                 switch (currentStructure->structureType) {
                     case ARRAY:
                         printf("Array \n    ");
-                            printArray(currentStructure->dataStructure);
                         break;
                     case LINKEDLIST:
                         printf("Linked List \n    ");

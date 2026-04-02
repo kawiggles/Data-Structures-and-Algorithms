@@ -12,6 +12,7 @@ target_sources(buildstruct
         src/linkedlist.c
         src/manage.c
         src/algo.c
+        src/hashtable.c
     
     PUBLIC
         FILE_SET headers
@@ -24,6 +25,7 @@ target_sources(buildstruct
             include/linkedlist.h
             include/manage.h
             include/algo.h
+            include/hashtable.h
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -3,9 +3,7 @@
 
 #include "data.h"
 
-/* 
-Type Definitions
-*/
+/* Type Definitions */
 
 // Holds a data struct and a pointer to another LinkedListNode struct
 typedef struct LinkedListNode LinkedListNode;
@@ -14,9 +12,7 @@ struct LinkedListNode {
     LinkedListNode * next;
 };
 
-/*
-Functions
-*/
+/* Functions */
 
 // Takes a pointer to a data struct and returns a pointer to a new head for a linked list
 LinkedListNode * makeLinkedList(Data * input);
@@ -25,16 +21,16 @@ LinkedListNode * makeLinkedList(Data * input);
 void destroyLinkedList(LinkedListNode * head);
 
 // Adds a new node with "input" data after "priorNode"
-int addLLNode(LinkedListNode * node, Data * input, int index);
+int addToLinkedList(LinkedListNode * node, Data * input, int index);
 
 // Deletes a node in a linked list
-int deleteLLNode(LinkedListNode ** node, int index);
+int deleteFromLinkedList(LinkedListNode ** node, int index);
 
 // Get length of linked list
-int getLLLength(LinkedListNode * head);
+int getLinkedListLength(LinkedListNode * head);
 
 // Iterates through a linked list to return last node of structure
-LinkedListNode * getLLLastNode(LinkedListNode * head);
+LinkedListNode * getLastLinkedListNode(LinkedListNode * head);
 
 // Prints a linked list
 void printLinkedList(LinkedListNode * head);

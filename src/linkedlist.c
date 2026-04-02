@@ -13,12 +13,12 @@ LinkedListNode * makeLinkedList(Data * input) {
     return head;
 }
 
-int addLLNode(LinkedListNode * node, Data * input, int index) {
+int addToLinkedList(LinkedListNode * node, Data * input, int index) {
     if (node == NULL) return -1;
     
     LinkedListNode * priorNode = node;
     if (index == -1) {
-        priorNode = getLLLastNode(node);
+        priorNode = getLastLinkedListNode(node);
     } else {
         for (int i = 0; i < index; i++) {
             if (priorNode->next != NULL) { 
@@ -40,7 +40,7 @@ int addLLNode(LinkedListNode * node, Data * input, int index) {
     return 1;
 }
 
-int deleteLLNode(LinkedListNode **node, int index) {
+int deleteFromLinkedList(LinkedListNode **node, int index) {
     if (*node == NULL) return -1;
     
     if ((*node)->next == NULL) {
@@ -89,7 +89,7 @@ void destroyLinkedList(LinkedListNode * head) {
     }
 }
 
-LinkedListNode * getLLLastNode(LinkedListNode * head) {
+LinkedListNode * getLastLinkedListNode(LinkedListNode * head) {
     LinkedListNode * currentNode = head;
 
     while (currentNode->next != NULL) currentNode = currentNode->next;
@@ -110,7 +110,7 @@ void printLinkedList(LinkedListNode * head) {
     printf("\n");
 }
 
-int getLLLength(LinkedListNode * head) {
+int getLinkedListLength(LinkedListNode * head) {
     LinkedListNode * current;
     int length = 0;
     while (current->next) {
