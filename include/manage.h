@@ -11,7 +11,7 @@ typedef enum {
     LINKEDLIST,
     HASHTABLE,
     UNDEFINED
-} DataStructureType;
+} StructType;
 
 typedef enum {
     BUILD,
@@ -26,16 +26,16 @@ typedef enum {
 } Operation;
 
 // Members of the linked list which defines the open data structures
-typedef struct OpenStructure OpenStructure;
-struct OpenStructure {
+typedef struct OpenStruct OpenStruct;
+struct OpenStruct {
     // enum of the structure type
-    DataStructureType structureType;
+    StructType structureType;
     // Pointer to the head of the data structure.
-    void * dataStructure;
+    void * dataStruct;
     // Numerical Id to easily identify the structure
     int structureId;
     // Pointer to the next structure
-    OpenStructure * nextStructure;
+    OpenStruct * nextStruct;
     // Size of struct, necessary for arrays
     int size;
 };
@@ -47,22 +47,22 @@ Functions
 // Returns an Operation enum from a string
 Operation getOperation(char * operationInput);
 
-// Returns a DataStructureType enum from a string
-DataStructureType getStructureType(char * structureInput);
+// Returns a DataStructType enum from a string
+StructType getStructType(char * structureInput);
 
 // Makes a new structure to add to the open structure linked list
-OpenStructure * makeOpenStructure(int id); 
+OpenStruct * makeOpenStruct(int id); 
 
 // Returns a pointer to a structure in the open structure linked list from its id
-OpenStructure * getStructure(int id);
+OpenStruct * getStruct(int id);
 
 // Get's last structure in stucture linked list
-OpenStructure * getLastStructure();
+OpenStruct * getLastStruct();
 
 // Takes input from main() and runs functions
 int parseInput(char * input);
 
 // Frees memory for all open data structures
-void endProgram(OpenStructure * head);
+void endProgram(OpenStruct * head);
 
 #endif

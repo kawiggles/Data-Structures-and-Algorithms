@@ -11,6 +11,6 @@ int deleteFromArray(Data * array, int index, int size);
 
 int destroyArray(Data * array);
 
-void printArray(Data * array);
+void printArray(Data * array, int size);
 
 #endif

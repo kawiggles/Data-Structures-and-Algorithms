@@ -4,6 +4,8 @@ project(Data_Structures_and_Algorithms)
 
 add_executable(buildstruct)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 target_sources(buildstruct
     PRIVATE
         src/main.c
@@ -20,6 +22,7 @@ target_sources(buildstruct
         BASE_DIRS
             include
         FILES
+            include/assert.h
             include/data.h
             include/array.h
             include/linkedlist.h
@@ -28,4 +31,3 @@ target_sources(buildstruct
             include/hashtable.h
 )
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
