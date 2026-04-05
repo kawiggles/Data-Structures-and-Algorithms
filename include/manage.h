@@ -14,6 +14,13 @@ typedef enum {
 } StructType;
 
 typedef enum {
+    SORT,
+    INSERTSORT,
+    MERGESORT,
+    NOTALGO
+} AlgoType;
+
+typedef enum {
     BUILD,
     ADD,
     DELETE,
@@ -45,10 +52,13 @@ Functions
 */
 
 // Returns an Operation enum from a string
-Operation getOperation(char * operationInput);
+Operation getOperation(char * input);
 
 // Returns a DataStructType enum from a string
-StructType getStructType(char * structureInput);
+StructType getStructType(char * input);
+
+// Returns an AlgoType enum from a string
+AlgoType getAlgoType(char * input);
 
 // Makes a new structure to add to the open structure linked list
 OpenStruct * makeOpenStruct(int id); 

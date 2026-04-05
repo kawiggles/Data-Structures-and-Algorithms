@@ -9,7 +9,7 @@ Type Definitons
 typedef union Data Data;
 union Data {
     int number;
-    char * string;
+    char character;
 };
 
 /*

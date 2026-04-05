@@ -26,9 +26,6 @@ int addToLinkedList(LinkedListNode * node, Data * input, int index);
 // Deletes a node in a linked list
 int deleteFromLinkedList(LinkedListNode ** node, int index);
 
-// Get length of linked list
-int getLinkedListLength(LinkedListNode * head);
-
 // Iterates through a linked list to return last node of structure
 LinkedListNode * getLastLinkedListNode(LinkedListNode * head);
 

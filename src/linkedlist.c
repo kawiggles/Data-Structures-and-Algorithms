@@ -109,13 +109,3 @@ void printLinkedList(LinkedListNode * head) {
     printData(currentNode->data);
     printf("\n");
 }
-
-int getLinkedListLength(LinkedListNode * head) {
-    LinkedListNode * current;
-    int length = 0;
-    while (current->next) {
-        length++;
-        current = current->next;
-    }
-    return length;
-}

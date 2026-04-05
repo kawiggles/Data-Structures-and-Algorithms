@@ -1,4 +1,5 @@
 #include "assert.h"
+#include "algo.h"
 #include "data.h"
 #include "array.h"
 #include "linkedlist.h"
@@ -12,26 +13,33 @@
 static OpenStruct * openStructListHead = NULL; 
 static int nextId = 0;
 
-Operation getOperation(char * operationInput) {
-    if (operationInput[0] == 'a') {
-        if (operationInput[1] == 'd') { return ADD; 
+Operation getOperation(char * input) {
+    if (input[0] == 'a') {
+        if (input[1] == 'd') { return ADD; 
         } else return ALGO;
-    } else if (operationInput[0] == 'b') {return BUILD;
-    } else if (operationInput[0] == 'd') {
-        if (operationInput[2] == 's') { return DESTROY;
+    } else if (input[0] == 'b') {return BUILD;
+    } else if (input[0] == 'd') {
+        if (input[2] == 's') { return DESTROY;
         } else return DELETE;
-    } else if (operationInput[0] == 'p') {
-        if (operationInput[5] == '\0') { return PRINT; 
+    } else if (input[0] == 'p') {
+        if (input[5] == '\0') { return PRINT; 
         } else return PRINTALL;
-    } else if (operationInput[0] == 'q') {return QUIT;
+    } else if (input[0] == 'q') { return QUIT;
     } else return INVALID;
 }
 
-StructType getStructType(char * structureInput) {
-    if (structureInput[0] == 'l') { return LINKEDLIST; 
-    } else if (structureInput[0] == 'a') { return ARRAY;
-    } else if (structureInput[0] == 'h') { return HASHTABLE;
+StructType getStructType(char * input) {
+    if (input[0] == 'l') { return LINKEDLIST; 
+    } else if (input[0] == 'a') { return ARRAY;
+    } else if (input[0] == 'h') { return HASHTABLE;
     } else return UNDEFINED;
+}
+
+AlgoType getAlgoType(char * input) {
+    if (input[0] == 's') { return SORT;
+    } else if (input[0] == 'i') { return INSERTSORT;
+    } else if (input[0] == 'm') { return MERGESORT;
+    } else return NOTALGO;
 }
 
 OpenStruct * makeOpenStruct(int id) {
@@ -94,7 +102,7 @@ int parseInput(char * input) {
     if (operation == NULL) return 0;
     
     char * token = strtok(NULL, " \n");
-    StructType type = UNDEFINED;
+    char * type = "";
     Data * data = NULL;
     int size = 0;
     int id = 0;
@@ -111,7 +119,7 @@ int parseInput(char * input) {
             }
 
             if (flag == 't') {
-                type = getStructType(flagValue);
+                type = flagValue;
             } else if (flag == 'd') {
                 data = makeData(atoi(flagValue));
             } else if (flag == 'i') {
@@ -147,7 +155,9 @@ int parseInput(char * input) {
                 workingStruct = workingStruct->nextStruct;
             }
 
-            switch (type) {
+            StructType structType = getStructType(type);
+
+            switch (structType) {
                 case ARRAY:
                     workingStruct->structureType = ARRAY;
                     workingStruct->dataStruct = makeArray(data, size);
@@ -158,12 +168,14 @@ int parseInput(char * input) {
                 case LINKEDLIST:
                     workingStruct->structureType = LINKEDLIST;
                     workingStruct->dataStruct = makeLinkedList(data);
+                    workingStruct->size = 1;
                     printf("Linked list successfully built with id %u \n", nextId);
                     nextId++;
                     break;
                 case HASHTABLE:
                     workingStruct->structureType = HASHTABLE;
                     workingStruct->dataStruct = makeHashTable(data);
+                    workingStruct->size = 1;
                     printf("Hash table successfully built with id %u \n", nextId);
                     nextId++;
                 case UNDEFINED:
@@ -195,10 +207,12 @@ int parseInput(char * input) {
                     break;
                 case LINKEDLIST:
                     addToLinkedList(workingStruct->dataStruct, data, index);
+                    workingStruct->size++;
                     printf("Node successfully added to linked list at id %u \n", id);
                     break; 
                 case HASHTABLE:
                     addToHashTable(workingStruct->dataStruct, data);
+                    workingStruct->size++;
                     printf("Element successfully added to hash table at id %u \n", id);
                     break;
                 case UNDEFINED:
@@ -214,7 +228,7 @@ int parseInput(char * input) {
         case DELETE: {
             OpenStruct * workingStruct = getStruct(id);
 
-            if (workingStruct == NULL) return 0;
+            ASSERT(workingStruct);
 
             switch (workingStruct->structureType) {
                 case ARRAY:
@@ -223,10 +237,12 @@ int parseInput(char * input) {
                 case LINKEDLIST: {
                     LinkedListNode ** head = (LinkedListNode **) &workingStruct->dataStruct;
                     deleteFromLinkedList(head, index);
+                    workingStruct->size--;
                     break;
                 }
                 case HASHTABLE:
                     deleteFromHashTable(workingStruct->dataStruct, data);
+                    workingStruct->size--;
                     break;
                 case UNDEFINED:
                     printf("Error: selected structure is an undefined type \n");
@@ -280,13 +296,31 @@ int parseInput(char * input) {
             break;
         }
 
-        case ALGO:
+        case ALGO: {
+            OpenStruct * workingStruct = getStruct(id);
+            
+            ASSERT(workingStruct);
+
+            AlgoType algoType = getAlgoType(type);
+
+            switch (algoType) {
+                case SORT:
+                    sort(workingStruct->dataStruct, workingStruct->structureType);
+                    break;
+                case MERGESORT:
+                    mergeSort(workingStruct->dataStruct, workingStruct->structureType);
+                    break;
+                case INSERTSORT:
+                    insertSort(workingStruct->dataStruct, workingStruct->structureType);
+
+            }
 
             break;
+        }
         case PRINT: {
             OpenStruct * workingStruct = getStruct(id);
             
-            if (workingStruct == NULL) return 0;
+            ASSERT(workingStruct);
 
             switch (workingStruct->structureType) {
                 case ARRAY:
@@ -309,7 +343,7 @@ int parseInput(char * input) {
         }
         case PRINTALL: {
             OpenStruct * currentStruct = openStructListHead;
-            if (!currentStruct) return 0;
+            ASSERT(currentStruct);
 
             int listIndex = 1;
 
