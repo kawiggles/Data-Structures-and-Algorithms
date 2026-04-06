@@ -3,9 +3,9 @@
 
 #include "manage.h"
 
-void * sort(void * structure, StructType structType);
+void sort(OpenStruct * structure);
 
-void * mergeSort(void * structure, StructType structType);
+void mergeSort(OpenStruct * structure);
 
-void * insertSort(void * structure, StructType structType);
+void insertSort(OpenStruct * structure);
 #endif

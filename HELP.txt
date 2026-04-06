@@ -1,0 +1,73 @@
+
+buildstruct: <command> [flags] [flag values]
+
+    buildstruct creates, manipulates, and displays data structures.
+
+COMMANDS:
+
+    build       creates a new data structure of the selected type
+
+            necessary flags: -t, -d
+
+    add         adds to an existing data structure
+
+    	    necessary flags: -i, -d
+    	    optional flags: -n
+
+            if no index is given, the element will be added to the end of the data structure
+
+	delete      deletes an element from a data structure
+    
+    	    necessary flags: -i
+    	    optional flags: -n
+
+            if no index is given, the last element will be deleted
+
+	destroy     deletes an existing data structure
+
+    	    necessary flags: -i
+
+	algo        performs an algorithmic operation on a data structure
+    
+    	    necessary flags: -i, -t
+
+	print       prints a visual representation of the data structure, as well as information about the structure
+
+    	    necessary flags: -i
+
+	printall    prints all open data structures and their IDs.
+
+    help        prints a list of command and flag options
+
+	quit        ends the program
+
+FLAGS
+
+	-t [type]   selects the type of data structure to generate, or the type of algorithm to execute
+
+        data structures:
+    	    - array
+    	    - linkedlist
+            - hashtable
+
+        algorithms:
+            - sort
+                - insertsort
+                - mergesort
+
+	-d [data]   selects data for program to insert into structure (currently only positive integer values)
+
+	-i [id]     selects a data structure by id. ids start at 0
+
+	-n [index]  selects a node in a data structure by index (starting at 0)
+
+	-s [size]   sets the size of the data structure to build (required for arrays)
+
+EXAMPLES
+
+    build -t linkedlist -d 32
+
+    add -i 2 -d 234987 -n 4
+
+    algo -t mergeSort -i 2
+

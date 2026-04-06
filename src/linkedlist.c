@@ -1,3 +1,4 @@
+#include "assert.h"
 #include "data.h"
 #include "linkedlist.h"
 
@@ -14,8 +15,8 @@ LinkedListNode * makeLinkedList(Data * input) {
 }
 
 int addToLinkedList(LinkedListNode * node, Data * input, int index) {
-    if (node == NULL) return -1;
-    
+    ASSERT(node);
+
     LinkedListNode * priorNode = node;
     if (index == -1) {
         priorNode = getLastLinkedListNode(node);
@@ -31,7 +32,7 @@ int addToLinkedList(LinkedListNode * node, Data * input, int index) {
     }
 
     LinkedListNode * newNode = malloc(sizeof(LinkedListNode));
-    if (newNode == NULL) return -1;
+    ASSERT(newNode);
 
     newNode->data = input;
     newNode->next = priorNode->next;
@@ -41,8 +42,8 @@ int addToLinkedList(LinkedListNode * node, Data * input, int index) {
 }
 
 int deleteFromLinkedList(LinkedListNode **node, int index) {
-    if (*node == NULL) return -1;
-    
+    ASSERT(*node);
+
     if ((*node)->next == NULL) {
         printf("Error: only one node in structure, use 'destroy' to remove this structure \n");
         return 0;
@@ -50,9 +51,7 @@ int deleteFromLinkedList(LinkedListNode **node, int index) {
 
     if (index == -1) {
         LinkedListNode * prior = *node;
-        while (prior->next->next != NULL) {
-            prior = prior->next;
-        }
+        while (prior->next->next != NULL) prior = prior->next;
         free(prior->next->data);
         free(prior->next);
         prior->next = NULL;
@@ -60,9 +59,7 @@ int deleteFromLinkedList(LinkedListNode **node, int index) {
     } else {
         LinkedListNode ** pointer = node;
 
-        for (int i = 0; i < index && *pointer != NULL; i++) {
-            pointer = &(*pointer)->next;
-        }
+        for (int i = 0; i < index && *pointer != NULL; i++) pointer = &(*pointer)->next;
 
         if (*pointer == NULL) {
             printf("Error: node to destroy not found at index %i \n", index);

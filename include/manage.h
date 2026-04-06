@@ -29,6 +29,7 @@ typedef enum {
     PRINT,
     PRINTALL,
     QUIT,
+    HELP,
     INVALID
 } Operation;
 

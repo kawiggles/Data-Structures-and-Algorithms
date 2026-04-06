@@ -9,9 +9,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 static OpenStruct * openStructListHead = NULL; 
-static int nextId = 0;
+static unsigned int nextId = 0;
 
 Operation getOperation(char * input) {
     if (input[0] == 'a') {
@@ -24,6 +25,7 @@ Operation getOperation(char * input) {
     } else if (input[0] == 'p') {
         if (input[5] == '\0') { return PRINT; 
         } else return PRINTALL;
+    } else if (input[0] == 'h') { return HELP;
     } else if (input[0] == 'q') { return QUIT;
     } else return INVALID;
 }
@@ -159,6 +161,10 @@ int parseInput(char * input) {
 
             switch (structType) {
                 case ARRAY:
+                    if (size <= 0) {
+                        printf("Error: array must have a defined size (C moment) \n");
+                        break;
+                    }
                     workingStruct->structureType = ARRAY;
                     workingStruct->dataStruct = makeArray(data, size);
                     workingStruct->size = size;
@@ -202,6 +208,10 @@ int parseInput(char * input) {
             
             switch (workingStruct->structureType) {
                 case ARRAY:
+                    if (size <= index) {
+                        printf("Error: array does not have element at selected index \n");
+                        break;
+                    }
                     addToArray(workingStruct->dataStruct, data, index, workingStruct->size);
                     printf("Element successfully added to array at id %u\n", id);
                     break;
@@ -219,8 +229,7 @@ int parseInput(char * input) {
                     printf("Error: selected structure is an undefined type \n");
                     break;
                 default:
-                    printf("DEBUG ERROR: empty structure \n");
-                    return -1;
+                    ASSERT(workingStruct);
             }
 
             break;
@@ -228,7 +237,10 @@ int parseInput(char * input) {
         case DELETE: {
             OpenStruct * workingStruct = getStruct(id);
 
-            ASSERT(workingStruct);
+            if (!workingStruct) {
+                printf("Error: no structure at selected id \n");
+                break;
+            }
 
             switch (workingStruct->structureType) {
                 case ARRAY:
@@ -248,8 +260,7 @@ int parseInput(char * input) {
                     printf("Error: selected structure is an undefined type \n");
                     break;
                 default:
-                    printf("DEBUG ERROR: empty structure \n");
-                    return -1;
+                    ASSERT(workingStruct);
             }
 
             break;
@@ -257,9 +268,7 @@ int parseInput(char * input) {
         case DESTROY: {
             OpenStruct ** workingPointer = &openStructListHead;
 
-            while (*workingPointer != NULL && (*workingPointer)->structureId != id) {
-                workingPointer = &(*workingPointer)->nextStruct;
-            }
+            while (*workingPointer != NULL && (*workingPointer)->structureId != id) workingPointer = &(*workingPointer)->nextStruct;
 
             if (*workingPointer == NULL) {
                 printf("Error: structure id not found \n");
@@ -273,7 +282,7 @@ int parseInput(char * input) {
                 case ARRAY:
                     destroyArray(workingStruct->dataStruct);
                     free(workingStruct);
-                    printf("Array at id %u successfully destroyed\n", id);
+                    printf("Array at id %u successfully destroyed \n", id);
                     break;
                 case LINKEDLIST:
                     destroyLinkedList(workingStruct->dataStruct);
@@ -289,8 +298,7 @@ int parseInput(char * input) {
                     printf("Error: selected structure is undefined \n");
                     break;
                 default:
-                    printf("DEBUG ERROR: empty structure \n");
-                    return -1;
+                    ASSERT(workingStruct);
             }
 
             break;
@@ -299,92 +307,118 @@ int parseInput(char * input) {
         case ALGO: {
             OpenStruct * workingStruct = getStruct(id);
             
-            ASSERT(workingStruct);
+            if (!workingStruct) {
+                printf("Error: no structure at selected id \n");
+                break;
+            }
 
             AlgoType algoType = getAlgoType(type);
 
             switch (algoType) {
                 case SORT:
-                    sort(workingStruct->dataStruct, workingStruct->structureType);
+                    sort(workingStruct);
                     break;
                 case MERGESORT:
-                    mergeSort(workingStruct->dataStruct, workingStruct->structureType);
+                    mergeSort(workingStruct);
                     break;
                 case INSERTSORT:
-                    insertSort(workingStruct->dataStruct, workingStruct->structureType);
-
+                    insertSort(workingStruct);
+                    break;
+                case NOTALGO:
+                    printf("Error: selected algorithm is not in the list of available algorithms \n");
+                    break;
+                default:
+                    ASSERT(algoType);
             }
 
             break;
         }
         case PRINT: {
             OpenStruct * workingStruct = getStruct(id);
-            
-            ASSERT(workingStruct);
+
+            if (!workingStruct) {
+                printf("Error, no structure at selected id \n");
+                break;
+            }
 
             switch (workingStruct->structureType) {
                 case ARRAY:
-                    printf("Printing Array at id %u... \n", id);
+                    printf("Printing Array at id %u... \n\t", id);
                     printArray(workingStruct->dataStruct, workingStruct->size);
                     break;
                 case LINKEDLIST:
-                    printf("Printing Linked List at id %u... \n", id);
+                    printf("Printing Linked List at id %u... \n\t", id);
                     printLinkedList(workingStruct->dataStruct);
                     break;
+                case HASHTABLE:
+                    printf("Printing Hash Table at id %u... \n\t", id);
+                    printHashTable(workingStruct->dataStruct);
+                    break;
                 case UNDEFINED:
-                    printf("Error: selected structure is undefined \n");
+                    printf("Error: selected structure is undefined \n\t");
                     break;
                 default:
-                    printf("DEBUG ERROR: emptry structure \n");
-                    return -1;
+                    ASSERT(workingStruct);
             }
 
             break;
         }
         case PRINTALL: {
             OpenStruct * currentStruct = openStructListHead;
-            ASSERT(currentStruct);
+            if (!currentStruct) {
+                printf("Error: no open structures to print \n");
+                break;
+            }
 
             int listIndex = 1;
-
             while (currentStruct != NULL) {
                 printf("ID %i: ", currentStruct->structureId);
                 
                 switch (currentStruct->structureType) {
                     case ARRAY:
-                        printf("Array \n    ");
+                        printf("Array \n\t");
                         printArray(currentStruct->dataStruct, currentStruct->size);
                         break;
                     case LINKEDLIST:
-                        printf("Linked List \n    ");
+                        printf("Linked List \n\t");
                         printLinkedList(currentStruct->dataStruct);
                         break;
                     case HASHTABLE:
-                        printf("Hash Table \n    ");
+                        printf("Hash Table \n\t");
                         printHashTable(currentStruct->dataStruct);
                         break;
                     case UNDEFINED:
-                        printf("Undefined Struct Type \n");
-                        break;
+                        ASSERT(currentStruct);
                 }
 
-            currentStruct = currentStruct->nextStruct;
+                currentStruct = currentStruct->nextStruct;
             }
 
             break;
+        }
+        case HELP: {
+            FILE * file;
+            file = fopen("../HELP.txt", "r");
+            if (!file) {
+                printf("HELP.txt not found \n");
+                break;
+            }
+
+            char line[256];
+            while (fgets(line, sizeof(line), file)) printf("%s", line);
+
+            fclose(file);
+            break; 
         }
         case QUIT:
             endProgram(openStructListHead);
             return 1;
         case INVALID:
-            printf("Error: command not recognized");
+            printf("Error: command not recognized \n");
             break;
         default:
-            printf("DEBUG ERROR: problem with getOperation");
-            return -1;
+            ASSERT(operation);
     }
 
-
     return 0;
-
 }

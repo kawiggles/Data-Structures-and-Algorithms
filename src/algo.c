@@ -1,14 +1,32 @@
 #include "algo.h"
+#include "array.h"
 #include "manage.h"
 
-void * sort(void * structure, StructType structType) {
+#include <stdio.h>
+
+void sort(OpenStruct * structure) {
+    switch (structure->structureType) {
+        case ARRAY:
+            mergeSortArray(structure->dataStruct, 0, structure->size - 1);
+            printf("Array at index %u sorted using mergeSort \n", structure->structureId);
+            break;
+        default:
+            printf("Error unknown data structure passed to sort \n");
+    }
+}
+
+void mergeSort(OpenStruct * structure) {
+    switch(structure->structureType) {
+        case ARRAY:
+            mergeSortArray(structure->dataStruct, 0, structure->size - 1);
+            printf("Array at index %u sorted using mergeSort \n", structure->structureId);
+            break;
+        default:
+            printf("Error: unknown data struct passed to mergeSort\n");
+    }
 
 }
 
-void * mergeSort(void * structure, StructType structType) {
-
-}
-
-void * insertSort(void * structure, StructType structType) {
+void insertSort(OpenStruct * structure) {
 
 }

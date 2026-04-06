@@ -13,4 +13,7 @@ int destroyArray(Data * array);
 
 void printArray(Data * array, int size);
 
+void mergeArra(Data * A, int p, int q, int r);
+void mergeSortArray(Data * A, int p, int r);
+
 #endif
