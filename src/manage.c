@@ -19,7 +19,8 @@ Operation getOperation(char * input) {
         if (input[1] == 'd') return ADD; 
         else return ALGO;
     } else if (input[0] == 'b') {
-        return BUILD;
+        if (input[5] == 'f') return BUILDFILE;
+        else return BUILD;
     } else if (input[0] == 'd') {
         if (input[2] == 's') return DESTROY;
         else return DELETE;
@@ -112,6 +113,8 @@ void endProgram(OpenStruct * head) {
         free(currentStruct);
         currentStruct = nextStruct;
     }
+
+    hs_exit();
 }
 
 int parseInput(char * input) {
@@ -207,6 +210,7 @@ int parseInput(char * input) {
                     workingStruct->size = 1;
                     printf("Hash table successfully built with id %u \n", nextId);
                     nextId++;
+                    break;
                 case UNDEFINED:
                     printf("Error: cannot build undefined data structure \n");
                     break;

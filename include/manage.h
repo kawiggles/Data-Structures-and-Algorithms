@@ -23,6 +23,7 @@ typedef enum {
 
 typedef enum {
     BUILD,
+    BUILDFILE,
     ADD,
     DELETE,
     DESTROY,

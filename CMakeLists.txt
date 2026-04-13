@@ -29,5 +29,6 @@ target_sources(buildstruct
             include/manage.h
             include/algo.h
             include/hashtable.h
+            $(ghc-pkg field rts include-dirs --simple-output)/HsFFI.h
 )
 
