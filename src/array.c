@@ -41,9 +41,26 @@ int deleteFromArray(Data * array, int index, int size) {
 }
 
 int destroyArray(Data * array) {
+    ASSERT(array);
+
     free(array);
     return 1;
 }
+
+int resizeArray(Data * array, int size) {
+    ASSERT(array);
+    ASSERT(size > 0);
+
+    Data * temp = realloc(array, sizeof(Data) * size);
+    if (!temp) {
+        printf("Failed to resize array \n");
+        return 0;
+    }
+
+    array = temp;
+    return 1;
+}
+
 
 void printArray(Data * data, int size) {
     printf("[");

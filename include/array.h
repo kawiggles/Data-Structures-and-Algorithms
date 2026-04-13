@@ -11,6 +11,8 @@ int deleteFromArray(Data * array, int index, int size);
 
 int destroyArray(Data * array);
 
+int resizeArray(Data * array, int size);
+
 void printArray(Data * array, int size);
 
 void mergeArra(Data * A, int p, int q, int r);

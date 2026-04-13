@@ -231,7 +231,7 @@ int parseInput(char * input) {
             
             switch (workingStruct->structureType) {
                 case ARRAY:
-                    if (size <= index) {
+                    if (size >= workingStruct->size) {
                         printf("Error: array does not have element at selected index \n");
                         break;
                     }
@@ -312,7 +312,10 @@ int parseInput(char * input) {
 
             switch (workingStruct->structureType) {
                 case ARRAY:
-
+                    if (resizeArray(workingStruct->dataStruct, size)) {
+                        printf("Array at id %u successfully resized to %d elements \n", id, size);
+                        workingStruct->size = size;
+                    } 
                     break;
                 default: 
                     printf("Error: structure cannot be resized \n");
