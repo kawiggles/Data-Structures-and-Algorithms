@@ -3,7 +3,6 @@
 
 #include "stdlib.h"
 #include "stdio.h"
-#include "math.h"
 
 Data * makeArray(Data * data, int size) {
     ASSERT(size > 0);
@@ -18,11 +17,10 @@ int addToArray(Data * array, Data * data, int index, int size) {
     ASSERT(index <= size);
 
     int i;
-    if (index == -1) {
+    if (index == -1)
         i = size - 1;
-    } else {
+    else
         i = index;
-    }
 
     array[i] = *data;
     return 1;
@@ -33,11 +31,10 @@ int deleteFromArray(Data * array, int index, int size) {
     ASSERT(index <= size);
 
     int i;
-    if (index == -1) {
+    if (index == -1)
         i = size - 1;
-    } else {
+    else
         i = index;
-    }
 
     array[i].number = 0;
     return 1;
@@ -50,9 +47,9 @@ int destroyArray(Data * array) {
 
 void printArray(Data * data, int size) {
     printf("[");
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < size - 1; i++)
         printf("%d, ", data[i].number);
-    }
+
     printf("%d]\n", data[size - 1].number);
 }
 
@@ -62,19 +59,22 @@ void mergeArray(Data * A, int p, int q, int r) {
     Data L[n1 + 1];
     Data R[n2 + 1];
     
-    for (int i = 0; i < n1; i++) L[i] = A[p + i];
-    for (int i = 0; i < n2; i++) R[i] = A[q + i + 1];
+    for (int i = 0; i < n1; i++)
+        L[i] = A[p + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = A[q + i + 1];
     
     int i = 0, j = 0, k = p;
     while (i < n1 && j < n2) {
-        if (L[i].number <= R[j].number) {
+        if (L[i].number <= R[j].number)
             A[k++] = L[i++];
-        } else {
+        else
             A[k++] = R[j++];
-        }
     }
-    while (i < n1) A[k++] = L[i++];
-    while (j < n2) A[k++] = R[j++];
+    while (i < n1)
+        A[k++] = L[i++];
+    while (j < n2)
+        A[k++] = R[j++];
 }
 
 void mergeSortArray(Data * A, int p, int r) {

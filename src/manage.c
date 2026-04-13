@@ -16,32 +16,48 @@ static unsigned int nextId = 0;
 
 Operation getOperation(char * input) {
     if (input[0] == 'a') {
-        if (input[1] == 'd') { return ADD; 
-        } else return ALGO;
-    } else if (input[0] == 'b') {return BUILD;
+        if (input[1] == 'd') return ADD; 
+        else return ALGO;
+    } else if (input[0] == 'b') {
+        return BUILD;
     } else if (input[0] == 'd') {
-        if (input[2] == 's') { return DESTROY;
-        } else return DELETE;
+        if (input[2] == 's') return DESTROY;
+        else return DELETE;
+    } else if (input [0] == 'r') {
+        return RESIZE;
     } else if (input[0] == 'p') {
-        if (input[5] == '\0') { return PRINT; 
-        } else return PRINTALL;
-    } else if (input[0] == 'h') { return HELP;
-    } else if (input[0] == 'q') { return QUIT;
-    } else return INVALID;
+        if (input[5] == '\0') return PRINT; 
+        else return PRINTALL;
+    } else if (input[0] == 'h') { 
+        return HELP;
+    } else if (input[0] == 'q') { 
+        return QUIT;
+    } else 
+        return INVALID;
 }
 
 StructType getStructType(char * input) {
-    if (input[0] == 'l') { return LINKEDLIST; 
-    } else if (input[0] == 'a') { return ARRAY;
-    } else if (input[0] == 'h') { return HASHTABLE;
-    } else return UNDEFINED;
+    if (input[0] == 'l') { 
+        return LINKEDLIST; 
+    } else if (input[0] == 'd') {
+        return DOUBLELIST;
+    } else if (input[0] == 'a') { 
+        return ARRAY;
+    } else if (input[0] == 'h') { 
+        return HASHTABLE;
+    } else 
+        return UNDEFINED;
 }
 
 AlgoType getAlgoType(char * input) {
-    if (input[0] == 's') { return SORT;
-    } else if (input[0] == 'i') { return INSERTSORT;
-    } else if (input[0] == 'm') { return MERGESORT;
-    } else return NOTALGO;
+    if (input[0] == 's') { 
+        return SORT;
+    } else if (input[0] == 'i') { 
+        return INSERTSORT;
+    } else if (input[0] == 'm') { 
+        return MERGESORT;
+    } else 
+        return NOTALGO;
 }
 
 OpenStruct * makeOpenStruct(int id) {
@@ -178,6 +194,13 @@ int parseInput(char * input) {
                     printf("Linked list successfully built with id %u \n", nextId);
                     nextId++;
                     break;
+                case DOUBLELIST:
+                    workingStruct->structureType = DOUBLELIST;
+                    workingStruct->dataStruct = makeDoubleList(data);
+                    workingStruct->size = 1;
+                    printf("Doubly linked list successfully built with id %u \n", nextId);
+                    nextId++;
+                    break;
                 case HASHTABLE:
                     workingStruct->structureType = HASHTABLE;
                     workingStruct->dataStruct = makeHashTable(data);
@@ -220,6 +243,11 @@ int parseInput(char * input) {
                     workingStruct->size++;
                     printf("Node successfully added to linked list at id %u \n", id);
                     break; 
+                case DOUBLELIST:
+                    addToDoubleList(workingStruct->dataStruct, data, index);
+                    workingStruct->size++;
+                    printf("Node successfully added to doubly linked list at id %u \n", id);
+                    break;
                 case HASHTABLE:
                     addToHashTable(workingStruct->dataStruct, data);
                     workingStruct->size++;
@@ -252,6 +280,10 @@ int parseInput(char * input) {
                     workingStruct->size--;
                     break;
                 }
+                case DOUBLELIST:
+                    deleteFromDoubleList(workingStruct->dataStruct, index);
+                    workingStruct->size--;
+                    break;
                 case HASHTABLE:
                     deleteFromHashTable(workingStruct->dataStruct, data);
                     workingStruct->size--;
@@ -265,10 +297,34 @@ int parseInput(char * input) {
 
             break;
         }
+        case RESIZE: {
+            OpenStruct * workingStruct = getStruct(id);
+
+            if (!workingStruct) {
+                printf("Error: no structure at selected id \n");
+                break;
+            }
+            
+            if (size <= 0) {
+                printf("Error: new size must set to value greater than 0");
+                break;
+            }
+
+            switch (workingStruct->structureType) {
+                case ARRAY:
+
+                    break;
+                default: 
+                    printf("Error: structure cannot be resized \n");
+            }
+            
+            break;
+        }
         case DESTROY: {
             OpenStruct ** workingPointer = &openStructListHead;
 
-            while (*workingPointer != NULL && (*workingPointer)->structureId != id) workingPointer = &(*workingPointer)->nextStruct;
+            while (*workingPointer != NULL && (*workingPointer)->structureId != id)
+                workingPointer = &(*workingPointer)->nextStruct;
 
             if (*workingPointer == NULL) {
                 printf("Error: structure id not found \n");
@@ -288,6 +344,11 @@ int parseInput(char * input) {
                     destroyLinkedList(workingStruct->dataStruct);
                     free(workingStruct);
                     printf("Linked list at id %u successfully destroyed \n", id);
+                    break;
+                case DOUBLELIST:
+                    destroyDoubleList(workingStruct->dataStruct);
+                    free(workingStruct);
+                    printf("Doubly linked list at id %u successfully destroyed \n", id);
                     break;
                 case HASHTABLE:
                     destroyHashTable(workingStruct->dataStruct);
@@ -350,6 +411,10 @@ int parseInput(char * input) {
                     printf("Printing Linked List at id %u... \n\t", id);
                     printLinkedList(workingStruct->dataStruct);
                     break;
+                case DOUBLELIST:
+                    printf("Printing Doubly Linked List at id %u... \n\t", id);
+                    printDoubleList(workingStruct->dataStruct);
+                    break;
                 case HASHTABLE:
                     printf("Printing Hash Table at id %u... \n\t", id);
                     printHashTable(workingStruct->dataStruct);
@@ -365,6 +430,7 @@ int parseInput(char * input) {
         }
         case PRINTALL: {
             OpenStruct * currentStruct = openStructListHead;
+
             if (!currentStruct) {
                 printf("Error: no open structures to print \n");
                 break;
@@ -383,6 +449,10 @@ int parseInput(char * input) {
                         printf("Linked List \n\t");
                         printLinkedList(currentStruct->dataStruct);
                         break;
+                    case DOUBLELIST:
+                        printf("Doubly Linked List \n\t");
+                        printDoubleList(currentStruct->dataStruct);
+                        break;
                     case HASHTABLE:
                         printf("Hash Table \n\t");
                         printHashTable(currentStruct->dataStruct);
@@ -399,13 +469,15 @@ int parseInput(char * input) {
         case HELP: {
             FILE * file;
             file = fopen("../HELP.txt", "r");
+
             if (!file) {
                 printf("HELP.txt not found \n");
                 break;
             }
 
             char line[256];
-            while (fgets(line, sizeof(line), file)) printf("%s", line);
+            while (fgets(line, sizeof(line), file))
+                printf("%s", line);
 
             fclose(file);
             break; 

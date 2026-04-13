@@ -12,23 +12,37 @@ struct LinkedListNode {
     LinkedListNode * next;
 };
 
+typedef struct DoubleListNode DoubleListNode;
+struct DoubleListNode {
+    Data * data;
+    DoubleListNode * prev;
+    DoubleListNode * next;
+};
+
 /* Functions */
 
 // Takes a pointer to a data struct and returns a pointer to a new head for a linked list
 LinkedListNode * makeLinkedList(Data * input);
+DoubleListNode * makeDoubleList(Data * input);
 
 // Starting from head input, frees memory for every node and its data
 void destroyLinkedList(LinkedListNode * head);
+void destroyDoubleList(DoubleListNode * head);
 
 // Adds a new node with "input" data after "priorNode"
 int addToLinkedList(LinkedListNode * node, Data * input, int index);
+int addToDoubleList(DoubleListNode * node, Data * input, int index);
 
 // Deletes a node in a linked list
 int deleteFromLinkedList(LinkedListNode ** node, int index);
+int deleteFromDoubleList(DoubleListNode * node, int index);
 
 // Iterates through a linked list to return last node of structure
 LinkedListNode * getLastLinkedListNode(LinkedListNode * head);
+DoubleListNode * getLastDoubleListNode(DoubleListNode * head);
 
 // Prints a linked list
 void printLinkedList(LinkedListNode * head);
+void printDoubleList(DoubleListNode * head);
+
 #endif

@@ -9,6 +9,7 @@ Type Definitions
 typedef enum {
     ARRAY,
     LINKEDLIST,
+    DOUBLELIST,
     HASHTABLE,
     UNDEFINED
 } StructType;
@@ -25,6 +26,7 @@ typedef enum {
     ADD,
     DELETE,
     DESTROY,
+    RESIZE,
     ALGO,
     PRINT,
     PRINTALL,
