@@ -32,6 +32,10 @@ parse str =
     let blocks = splitBlocks (T.lines str)
     in traverse parseBlock blocks
 
+splitBlock :: [Text] -> [[Text]]
+splitBlock str =
+    let items 
+
 -- The function exposes to C 
 foreign export ccall parseFile :: CString -> IO (Ptr CString)
 

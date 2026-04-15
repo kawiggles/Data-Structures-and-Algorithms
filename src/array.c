@@ -8,7 +8,9 @@ Data * makeArray(Data * data, int size) {
     ASSERT(size > 0);
 
     Data *array = malloc(sizeof(Data) * size);
-    array[0] = *data;
+
+    if (data) array[0] = *data;
+
     return array;
 }
 

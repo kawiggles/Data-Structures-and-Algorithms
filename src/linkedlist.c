@@ -6,7 +6,11 @@
 #include <stdio.h>
 
 LinkedListNode * makeLinkedList(Data * input) {
-    ASSERT(input);
+    if (!input) {
+        printf("Error: a data value is required to initate a linked list \n");
+        return NULL;
+    }
+
     LinkedListNode * head = malloc(sizeof(LinkedListNode));
 
     head->data = input;
@@ -115,7 +119,11 @@ void printLinkedList(LinkedListNode * head) {
 }
 
 DoubleListNode * makeDoubleList(Data * input) {
-    ASSERT(input);
+    if (!input) {
+        printf("Error: a data value is required to initate a linked list \n");
+        return NULL;
+    }
+
     DoubleListNode * head = malloc(sizeof(DoubleListNode));
 
     head->data = input;

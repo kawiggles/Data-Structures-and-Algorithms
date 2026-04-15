@@ -11,6 +11,9 @@ typedef enum {
     LINKEDLIST,
     DOUBLELIST,
     HASHTABLE,
+    STACK,
+    QUEUE,
+    DEQUE,
     UNDEFINED
 } StructType;
 

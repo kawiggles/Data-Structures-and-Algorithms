@@ -15,6 +15,7 @@ target_sources(buildstruct
         src/manage.c
         src/algo.c
         src/hashtable.c
+        src/restricted.c
     
     PUBLIC
         FILE_SET headers
@@ -29,6 +30,6 @@ target_sources(buildstruct
             include/manage.h
             include/algo.h
             include/hashtable.h
-            $(ghc-pkg field rts include-dirs --simple-output)/HsFFI.h
+            include/restricted.h
 )
 

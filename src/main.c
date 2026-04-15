@@ -1,11 +1,8 @@
 #include "manage.h"
 #include <stdio.h>
-#include <HsFFI.h>
 
 int main(int argc, char *argv[]) {
     printf("buildstruct is running! Type \"help\" for help and \"quit\" to quit: \n");
-
-    hs_init(&argc, &argv);
 
     char input[256];
 

@@ -113,8 +113,6 @@ void endProgram(OpenStruct * head) {
         free(currentStruct);
         currentStruct = nextStruct;
     }
-
-    hs_exit();
 }
 
 int parseInput(char * input) {
@@ -126,7 +124,7 @@ int parseInput(char * input) {
     char * type = "";
     Data * data = NULL;
     int size = 0;
-    int id = 0;
+    int id = -1;
     int index = -1;
 
     while (token != NULL) {
@@ -160,14 +158,9 @@ int parseInput(char * input) {
 
     switch (getOperation(operation)) {
         case BUILD: {
-            if (!data) {
-                printf("Error: no data to add to new structure \n");
-                return 0;
-            }
-
             OpenStruct * workingStruct;
 
-            if (openStructListHead == NULL) {
+            if (!openStructListHead) {
                 openStructListHead = makeOpenStruct(nextId);
                 workingStruct = openStructListHead;
             } else {
@@ -176,39 +169,49 @@ int parseInput(char * input) {
                 workingStruct = workingStruct->nextStruct;
             }
 
-            StructType structType = getStructType(type);
-
-            switch (structType) {
+            switch (getStructType(type)) {
                 case ARRAY:
                     if (size <= 0) {
                         printf("Error: array must have a defined size (C moment) \n");
+                        free(workingStruct);
+                        openStructListHead = NULL;
                         break;
                     }
                     workingStruct->structureType = ARRAY;
                     workingStruct->dataStruct = makeArray(data, size);
                     workingStruct->size = size;
-                    printf("Array successfully built with id %u and size %d\n", nextId, size);
+                    printf("Array successfully built with id %d and size %d\n", nextId, size);
                     nextId++;
                     break;
                 case LINKEDLIST:
-                    workingStruct->structureType = LINKEDLIST;
                     workingStruct->dataStruct = makeLinkedList(data);
+                    if (!workingStruct->dataStruct) {
+                        free(workingStruct);
+                        openStructListHead = NULL;
+                        break;
+                    }
+                    workingStruct->structureType = LINKEDLIST;
                     workingStruct->size = 1;
-                    printf("Linked list successfully built with id %u \n", nextId);
+                    printf("Linked list successfully built with id %d \n", nextId);
                     nextId++;
                     break;
                 case DOUBLELIST:
-                    workingStruct->structureType = DOUBLELIST;
                     workingStruct->dataStruct = makeDoubleList(data);
+                    if (!workingStruct->dataStruct) {
+                        free(workingStruct);
+                        openStructListHead = NULL;
+                        break;
+                    }
+                    workingStruct->structureType = DOUBLELIST;
                     workingStruct->size = 1;
-                    printf("Doubly linked list successfully built with id %u \n", nextId);
+                    printf("Doubly linked list successfully built with id %d \n", nextId);
                     nextId++;
                     break;
                 case HASHTABLE:
                     workingStruct->structureType = HASHTABLE;
                     workingStruct->dataStruct = makeHashTable(data);
                     workingStruct->size = 1;
-                    printf("Hash table successfully built with id %u \n", nextId);
+                    printf("Hash table successfully built with id %d \n", nextId);
                     nextId++;
                     break;
                 case UNDEFINED:
@@ -226,9 +229,15 @@ int parseInput(char * input) {
                 return 0;
             }
             
-            OpenStruct * workingStruct = getStruct(id); 
+            OpenStruct * workingStruct;
+            if (id == -1) {
+                workingStruct = getLastStruct();
+                id = workingStruct->structureId;
+            } else {
+                workingStruct = getStruct(id); 
+            }
 
-            if (workingStruct == NULL) {
+            if (!workingStruct) {
                 printf("Error: no data structure at selected index\n");
                 return 0;
             }
@@ -240,22 +249,22 @@ int parseInput(char * input) {
                         break;
                     }
                     addToArray(workingStruct->dataStruct, data, index, workingStruct->size);
-                    printf("Element successfully added to array at id %u\n", id);
+                    printf("Element successfully added to array at id %d\n", id);
                     break;
                 case LINKEDLIST:
-                    addToLinkedList(workingStruct->dataStruct, data, index);
+                    if(!addToLinkedList(workingStruct->dataStruct, data, index)) break;
                     workingStruct->size++;
-                    printf("Node successfully added to linked list at id %u \n", id);
+                    printf("Node successfully added to linked list at id %d \n", id);
                     break; 
                 case DOUBLELIST:
-                    addToDoubleList(workingStruct->dataStruct, data, index);
+                    if(!addToDoubleList(workingStruct->dataStruct, data, index)) break;
                     workingStruct->size++;
-                    printf("Node successfully added to doubly linked list at id %u \n", id);
+                    printf("Node successfully added to doubly linked list at id %d \n", id);
                     break;
                 case HASHTABLE:
-                    addToHashTable(workingStruct->dataStruct, data);
+                    if(!addToHashTable(workingStruct->dataStruct, data)) break;
                     workingStruct->size++;
-                    printf("Element successfully added to hash table at id %u \n", id);
+                    printf("Element successfully added to hash table at id %d \n", id);
                     break;
                 case UNDEFINED:
                     printf("Error: selected structure is an undefined type \n");
@@ -267,7 +276,13 @@ int parseInput(char * input) {
             break;
         }
         case DELETE: {
-            OpenStruct * workingStruct = getStruct(id);
+            OpenStruct * workingStruct;
+            if (id == -1) {
+                workingStruct = getLastStruct();
+                id = workingStruct->structureId;
+            } else {
+                workingStruct = getStruct(id); 
+            }
 
             if (!workingStruct) {
                 printf("Error: no structure at selected id \n");
@@ -277,19 +292,23 @@ int parseInput(char * input) {
             switch (workingStruct->structureType) {
                 case ARRAY:
                     deleteFromArray(workingStruct->dataStruct, index, workingStruct->size);
+                    printf("Element successfully deleted from array at id %d \n", id);
                     break;
                 case LINKEDLIST: {
                     LinkedListNode ** head = (LinkedListNode **) &workingStruct->dataStruct;
-                    deleteFromLinkedList(head, index);
+                    if(!deleteFromLinkedList(head, index)) break;
+                    printf("Element successfully deleted from linked list at id %d \n", id);
                     workingStruct->size--;
                     break;
                 }
                 case DOUBLELIST:
-                    deleteFromDoubleList(workingStruct->dataStruct, index);
+                    if(!deleteFromDoubleList(workingStruct->dataStruct, index)) break;
+                    printf("Element successfully deleted from doubly linked list at id %d \n", id);
                     workingStruct->size--;
                     break;
                 case HASHTABLE:
                     deleteFromHashTable(workingStruct->dataStruct, data);
+                    printf("Element successfully deleted from hash table at id %d \n", id);
                     workingStruct->size--;
                     break;
                 case UNDEFINED:
@@ -317,7 +336,7 @@ int parseInput(char * input) {
             switch (workingStruct->structureType) {
                 case ARRAY:
                     if (resizeArray(workingStruct->dataStruct, size)) {
-                        printf("Array at id %u successfully resized to %d elements \n", id, size);
+                        printf("Array at id %d successfully resized to %d elements \n", id, size);
                         workingStruct->size = size;
                     } 
                     break;
@@ -333,7 +352,7 @@ int parseInput(char * input) {
             while (*workingPointer != NULL && (*workingPointer)->structureId != id)
                 workingPointer = &(*workingPointer)->nextStruct;
 
-            if (*workingPointer == NULL) {
+            if (!*workingPointer) {
                 printf("Error: structure id not found \n");
                 break;
             }
@@ -345,22 +364,22 @@ int parseInput(char * input) {
                 case ARRAY:
                     destroyArray(workingStruct->dataStruct);
                     free(workingStruct);
-                    printf("Array at id %u successfully destroyed \n", id);
+                    printf("Array at id %d successfully destroyed \n", id);
                     break;
                 case LINKEDLIST:
                     destroyLinkedList(workingStruct->dataStruct);
                     free(workingStruct);
-                    printf("Linked list at id %u successfully destroyed \n", id);
+                    printf("Linked list at id %d successfully destroyed \n", id);
                     break;
                 case DOUBLELIST:
                     destroyDoubleList(workingStruct->dataStruct);
                     free(workingStruct);
-                    printf("Doubly linked list at id %u successfully destroyed \n", id);
+                    printf("Doubly linked list at id %d successfully destroyed \n", id);
                     break;
                 case HASHTABLE:
                     destroyHashTable(workingStruct->dataStruct);
                     free(workingStruct);
-                    printf("Hash table at id %u successfully destroyed \n", id);
+                    printf("Hash table at id %d successfully destroyed \n", id);
                     break;
                 case UNDEFINED:
                     printf("Error: selected structure is undefined \n");
@@ -381,7 +400,6 @@ int parseInput(char * input) {
             }
 
             AlgoType algoType = getAlgoType(type);
-
             switch (algoType) {
                 case SORT:
                     sort(workingStruct);
@@ -411,19 +429,19 @@ int parseInput(char * input) {
 
             switch (workingStruct->structureType) {
                 case ARRAY:
-                    printf("Printing Array at id %u... \n\t", id);
+                    printf("Printing Array at id %d... \n\t", id);
                     printArray(workingStruct->dataStruct, workingStruct->size);
                     break;
                 case LINKEDLIST:
-                    printf("Printing Linked List at id %u... \n\t", id);
+                    printf("Printing Linked List at id %d... \n\t", id);
                     printLinkedList(workingStruct->dataStruct);
                     break;
                 case DOUBLELIST:
-                    printf("Printing Doubly Linked List at id %u... \n\t", id);
+                    printf("Printing Doubly Linked List at id %d... \n\t", id);
                     printDoubleList(workingStruct->dataStruct);
                     break;
                 case HASHTABLE:
-                    printf("Printing Hash Table at id %u... \n\t", id);
+                    printf("Printing Hash Table at id %d... \n\t", id);
                     printHashTable(workingStruct->dataStruct);
                     break;
                 case UNDEFINED:
